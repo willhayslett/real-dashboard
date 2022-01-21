@@ -1,0 +1,10 @@
+#dashboard-grid {
+  height: 100%;
+  width: 100%;
+}
+
+.grid-stack-item-content {
+  color: #fff;
+  background-color: #27292D;
+  border-radius: 15px;
+}
