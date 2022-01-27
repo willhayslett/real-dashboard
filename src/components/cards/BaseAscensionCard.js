@@ -135,7 +135,7 @@ class BaseAscensionCard extends React.Component {
               </div>
               <div>
                 <h3 className="text-left">Good Evening, {hass.user.name}!</h3>
-                <h5 className="text-right">Tuesday, January 18, 2022 8:20PM</h5>
+                <h5 className="text-right">{new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'medium' }).format(new Date())}</h5>
               </div>
             </div>
             <div className="card-body">

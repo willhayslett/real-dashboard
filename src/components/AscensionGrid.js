@@ -1,52 +1,22 @@
 import React from 'react';
-const { useState, useEffect, createRef, useRef } = React;
-import { GridStack } from 'gridstack';
-import 'gridstack/dist/h5/gridstack-dd-native';
-import "../styles/global.css";
+const { createRef, useRef } = React;
+import '../styles/global.css';
+import styles from './AscensionGrid.module.css';
 
 import BaseAscensionCard from './cards/BaseAscensionCard';
 //import WelcomeAscensionCard from './cards/WelcomeAscensionCard';
 
-export default function AscensionGrid({ gridItems, hass }) {
+import { WidthProvider, Responsive } from "react-grid-layout";
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
+export default function AscensionGrid({ gridItems, hass, ...props }) {
   const refs = useRef({})
-  const gridRef = useRef()
 
-  const hassStates = Object.keys(hass.states)
-  .filter(
-    (key, idx) => !hass.states[key].attributes.hidden 
-      && hass.states[key].state != 'unavailable'
-      && idx < 10
-  );
-
-  // if (Object.keys(refs.current).length !== gridItems.length) {
-  //   gridItems.forEach(({ id }) => {
-  //     refs.current[id] = refs.current[id] || createRef()
-  //   })
-  // }
-
-  if (Object.keys(refs.current).length !== hassStates.length) {
-    hassStates.forEach((stateEntity, id) => {
+  if (Object.keys(refs.current).length !== gridItems) {
+    gridItems.forEach((stateEntity, id) => {
       refs.current[id] = refs.current[id] || createRef()
     })
   }
-
-  useEffect(()=> {
-    const grid = createGridInstance();
-    addNewWidget(grid);
-    return () => {};
-  }, [hassStates]);
-
-  function createGridInstance() {
-    gridRef.current = gridRef.current || GridStack.init({ float: false }, '#dashboard-grid');
-    return gridRef.current;
-  }
-  
-  function addNewWidget(grid, event) {
-    grid.batchUpdate()
-    grid.removeAll(false)
-    hassStates.forEach((stateEntity, id) => grid.makeWidget(refs.current[id].current))
-    grid.commit();
-  };
   
   function WidgetGenerator({id, type, ...props}) {
     console.log(type)
@@ -64,27 +34,64 @@ export default function AscensionGrid({ gridItems, hass }) {
     }
   }
 
+  // function onAddItem() {
+  //   this.setState({
+  //     // Add a new item. It must have a unique key!
+  //     items: this.state.items.concat({
+  //       i: "n" + this.state.newCounter,
+  //       x: (this.state.items.length * 2) % (this.state.cols || 12),
+  //       y: Infinity, // puts it at the bottom
+  //       w: 2,
+  //       h: 2
+  //     }),
+  //     // Increment the counter to ensure key is always unique.
+  //     newCounter: this.state.newCounter + 1
+  //   });
+  // }
+
+  // We're using the cols coming back from this to calculate where to add new items.
+  // function onBreakpointChange(breakpoint, cols) {
+  //   // this.setState({
+  //   //   breakpoint: breakpoint,
+  //   //   cols: cols
+  //   // });
+  // }
+
+  // function onLayoutChange(layout) {
+  //   props.onLayoutChange(layout);
+  //   // this.setState({ layout: layout });
+  // }
+
   return (
-    <div id="panel-background">
-      <div id="dashboard-grid" className="grid-stack">
+    <div id="panel-background" >
+      <div>
         {
-          hassStates.map((key, idx) =>
-            <div ref={refs.current[idx]} key={idx} className={`grid-stack-item`}>
-              <div className="grid-stack-item-content">
-                <WidgetGenerator id={idx} key={key} hass={hass} stateObj={hass.states[key]}/>
+          gridItems.length < 1 
+            ? 
+              <div className={`d-flex flex-column justify-content-center align-items-center ${styles.emptyGridIntro}`}>
+                <h1>Welcome to the Ascension Dashboard!</h1>
+                <p>You've got an empty dashboard. Start building by clicking the button below!.</p>
+                <button className="btn btn-primary">Get Started</button>
               </div>
-            </div>
-          )
+            :
+              <ResponsiveReactGridLayout
+                // onLayoutChange={onLayoutChange}
+                // onBreakpointChange={onBreakpointChange}
+                {...props}
+              >
+                {
+                  gridItems.map((key, idx) =>
+                    <div ref={refs.current[idx]} key={idx} className={`grid-stack-item`}>
+                      <div className="grid-stack-item-content" key={idx} data-grid={{
+                        i: key.i, x: key.x, y: key.y, w: key.w, h: key.w,
+                      }}>
+                        <WidgetGenerator id={idx} key={key} hass={hass} stateObj={hass.states[key]}/>
+                      </div>
+                    </div>
+                  )
+                }
+              </ResponsiveReactGridLayout>
         }
-        {/* {gridItems.map((item, i) => {
-          return (
-            <div ref={refs.current[item.id]} key={item.id} className={'grid-stack-item'}>
-              <div className="grid-stack-item-content">
-                <WidgetGenerator {...item} />
-              </div>
-            </div>
-          )
-        })} */}
       </div>
     </div>
   )

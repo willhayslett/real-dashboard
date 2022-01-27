@@ -8,3 +8,8 @@
   background-color: #27292D;
   border-radius: 15px;
 }
+
+.emptyGridIntro {
+  color: #dee2e6;
+  height: calc(100vh - 104px);
+}

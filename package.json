@@ -10,12 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/styles": "^4.11.4",
-    "@react-page/editor": "^4.4.2",
-    "@react-page/plugins-image": "^4.4.2",
-    "@react-page/plugins-slate": "^4.4.2",
     "@shoelace-style/shoelace": "^2.0.0-beta.64",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.7.2",

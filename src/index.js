@@ -1,7 +1,6 @@
 import 'bootstrap/dist/js/bootstrap.js';
 import AscensionPanelElement from './AscensionElement';
 import AscensionDashboard from './AscensionDashboard';
-import Panel from './components/Panel'
 
 
 // ReactDOM.render(

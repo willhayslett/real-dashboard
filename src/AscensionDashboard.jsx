@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Layout from './components/Layout';
 import AscensionDrawer from './components/AscensionDrawer';
-import AscensionGrid from './components/AscensionGridcopy';
+import AscensionGrid from './components/AscensionGrid';
 
 
 function AscensionDashboard(props) {
